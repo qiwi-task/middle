@@ -24,7 +24,7 @@ class FileModeIdEnum {
     ];
 }
 
-class CrawlerServiceTypeId
+class CrawlerServiceTypeIdEnum
 {
     public const COORDINATES = 1;
 }
@@ -161,7 +161,7 @@ class CrawlerServiceFactory
 {
     public function resolveCrawlerService(int $crawlerServiceTypeId, array $options, FileServiceInterface $fileService): CrawlerServiceInterface
     {
-        if (CrawlerServiceTypeId::COORDINATES === $crawlerServiceTypeId) {
+        if (CrawlerServiceTypeIdEnum::COORDINATES === $crawlerServiceTypeId) {
             return new CrawlerCoordinatesService($fileService, $options);
         }
         throw new Exception("crawlerServiceTypeId: {$crawlerServiceTypeId} is not found");
@@ -282,7 +282,7 @@ $configFileService = [
 
 // Excecuting
 $fileService = (new FileServiceFactory())->resolveFileService(FileServiceTypeIdEnum::LOCAL, $configFileService);
-$reportService = (new CrawlerServiceFactory)->resolveCrawlerService(CrawlerServiceTypeId::COORDINATES, $configCrawler, $fileService);
-$reportService->run();
-$reportService->save();
-print $reportService->getReport()->getData();
+$crawlerService = (new CrawlerServiceFactory)->resolveCrawlerService(CrawlerServiceTypeIdEnum::COORDINATES, $configCrawler, $fileService);
+$crawlerService->run();
+$crawlerService->save();
+print $crawlerService->getReport()->getData();
